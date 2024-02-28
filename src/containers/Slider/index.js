@@ -36,7 +36,7 @@ const Slider = () => {
   };
 
   useEffect(() => {
-    const timer = setTimeout(nextCard, 5000);
+    const timer = setTimeout(nextCard, 6000);
     return () => clearTimeout(timer); // 清除定时器以避免内存泄漏
   }, [index, byDateDesc]);
 
@@ -45,8 +45,7 @@ const Slider = () => {
       {byDateDesc?.map((event, eventIdx) => (  // 将 idx 改为 eventIdx
         <>
           <div
-            // key={event.title}
-            key={event.id} 
+            key={event.title}
             className={`SlideCard SlideCard--${
               index ===  eventIdx ? "display" : "hide"
             }`}
