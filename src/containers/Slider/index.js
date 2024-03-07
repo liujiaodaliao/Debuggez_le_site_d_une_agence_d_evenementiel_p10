@@ -40,12 +40,16 @@ const Slider = () => {
     return () => clearTimeout(timer); // 清除定时器以避免内存泄漏
   }, [index, byDateDesc]);
 
+  // useEffect(()=>{
+  //   console.log('byDateDesc:', byDateDesc)
+  //   },[byDateDesc]) 
+
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, eventIdx) => (  // 将 idx 改为 eventIdx
-        <>
+        <div  key={event.title}>
           <div
-            key={event.title}
+           
             className={`SlideCard SlideCard--${
               index ===  eventIdx ? "display" : "hide"
             }`}
@@ -61,10 +65,10 @@ const Slider = () => {
           </div>
           <div className="SlideCard__paginationContainer">
             <div className="SlideCard__pagination">
-              {byDateDesc.map((_, idx) => (
+              {byDateDesc.map((element,idx) => (
                 <input
                   // key={`${event.id}`}
-                  key={event.id}
+                  key={element.title}
                   type="radio"
                   name="radio-button"
                   // checked={idx === radioIdx}
@@ -74,7 +78,7 @@ const Slider = () => {
               ))}
             </div>
           </div>
-        </>
+        </div>
       ))}
     </div>
   );

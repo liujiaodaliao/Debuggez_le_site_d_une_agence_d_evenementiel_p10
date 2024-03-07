@@ -13,7 +13,18 @@ import Modal from "../../containers/Modal";
 import { useData } from "../../contexts/DataContext";
 
 const Page = () => {
-  const {last} = useData()
+  const {data} = useData();
+  const last =
+    data && data.events && data.events.length > 0
+      ? data.events.reduce((latest, current) => {
+          // Utiliser la date pour comparer et trouver la prestation la plus récente
+          const latestDate = new Date(latest.date);
+          const currentDate = new Date(current.date);
+
+          return currentDate > latestDate ? current : latest;
+        })
+      : null;
+
   return <>
     <header>
       <Menu />
@@ -116,13 +127,18 @@ const Page = () => {
     <footer className="row">
       <div className="col presta">
         <h3>Notre derniére prestation</h3>
+        {last && (
         <EventCard
           imageSrc={last?.cover}
+          imageAlt={last?.description}
           title={last?.title}
           date={new Date(last?.date)}
           small
-          label="boom"
+          // label="boom"
+          label={last?.type}
+          data-testid="lastEvent"
         />
+        )}
       </div>
       <div className="col contact">
         <h3>Contactez-nous</h3>
