@@ -7,42 +7,26 @@ import "./style.scss";
 const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
-  // const byDateDesc = data?.focus.sort((evtA, evtB) =>
-  //   new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
-  // );
-  // const nextCard = () => {
-  //   setTimeout(
-  //     () => setIndex(index < byDateDesc.length ? index + 1 : 0),
-  //     5000
-  //   );
-  // };
-  // useEffect(() => {
-  //   nextCard();
-  // });
   
-  
-  // 修改日期渲染逻辑
+  // 修改日期渲染逻辑,用副本比较排序避免原始数据被修改，添加空数组避免空值检查，报错，因为不bhdagedesc初始默认值为undefined，然后对比事件时间符合降序返回负值，实现降序排列事件
   const byDateDesc = data?.focus ? [...data.focus].sort((evtA, evtB) =>
     new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
   ) : [];
 
   // 修改循环播放逻辑
   const nextCard = () => {
-    // setTimeout(
-    //   () => setIndex((prevIndex) => (prevIndex < byDateDesc.length - 1 ? prevIndex + 1 : 0)), // 如果到达最后一张，则循环回第一张
-    //   5000
-    // );
-    setIndex((prevIndex) => (prevIndex < byDateDesc.length - 1 ? prevIndex + 1 : 0));
-  };
+    setTimeout(
+      () => setIndex(index < byDateDesc.length - 1 ? index + 1 : 0),
+      5000
+    );
+    };
 
   useEffect(() => {
-    const timer = setTimeout(nextCard, 6000);
+    const timer = setTimeout(nextCard, 5000);
     return () => clearTimeout(timer); // 清除定时器以避免内存泄漏
-  }, [index, byDateDesc]);
+  }, [index]);
 
-  // useEffect(()=>{
-  //   console.log('byDateDesc:', byDateDesc)
-  //   },[byDateDesc]) 
+    // console.log('byDateDesc:', byDateDesc)
 
   return (
     <div className="SlideCardList">
@@ -65,15 +49,14 @@ const Slider = () => {
           </div>
           <div className="SlideCard__paginationContainer">
             <div className="SlideCard__pagination">
-              {byDateDesc.map((element,idx) => (
+              {byDateDesc.map((_,radioIdx) => (
                 <input
                   // key={`${event.id}`}
-                  key={element.title}
+                  key={`${event.id}-${radioIdx}`} 
                   type="radio"
-                  name="radio-button"
-                  // checked={idx === radioIdx}
-                  checked={index === idx}
-                  onChange={() => setIndex(idx)} // 点击时切换到对应图片
+                  name={`radio-button-${eventIdx}-${radioIdx}`}  // donne valeur unique
+                  checked={index === radioIdx}  // 内外索引相同
+                  onChange={() => setIndex(radioIdx)} // 点击时切换到对应图片
                 />
               ))}
             </div>
